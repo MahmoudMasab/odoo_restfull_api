@@ -1,6 +1,4 @@
-
-
-
+from ..service.auth_service import IAuthService
 from ..utils.exceptions_unauthorized import UnauthorizedInvalidToken, UnauthorizedMissingAuthorizationHeader
 from ..models.users_token import UsersToken
 from ..utils.response_models.user_auth_response import UserAuthResponce
@@ -12,9 +10,9 @@ from ..utils.methods_constants import check_data, check_and_remove_country_code_
 from ..utils.models_name import ModelsName
 from odoo import _
 
-class AuthRepository:
-    @staticmethod
-    def signUp():
+class AuthRepository(IAuthService):
+   
+    def signUp(self):
             fetchRequestLanguage()
             args =  request.get_json_data()
             required_fields=['name','country_id','mobile', 'password']
@@ -41,14 +39,14 @@ class AuthRepository:
               print("confirmation_code :",user_sudo.confirmation_code)
               validatorConfirmAuth = getValidatorConfirmAuth()
               confirmToken = create_token(validatorConfirmAuth,expiresIn= refreshTokenExpiresIn, partner_id=user_sudo.partner_id.id)
-              request.env[ModelsName.matlobUsersTokens].sudo().create(
+              request.env[ModelsName.authUsersTokens].sudo().create(
                         UsersToken.toMap(token=confirmToken,refresh_token=None ,type=nameConfirmCodeToken ,user_id=user_sudo.id)
               ) 
               return {"confirm_token": confirmToken}   
             else: raise ParamsErrorException("the fields name,mobile,country_id or password are not found in json bady")
 
-    @staticmethod
-    def signIn():
+   
+    def signIn(self):
             fetchRequestLanguage()
             validatorPortalAuth = getValidatorPortalAuth()
             validatorRefreshAuth = getValidatorRefreshAuth()
@@ -71,7 +69,7 @@ class AuthRepository:
                     user_sudo.check(request.session.db , uid=user_sudo.id,passwd= password)
                     accessToken = create_token(validatorPortalAuth,expiresIn= accessTokenExpiresIn, partner_id=user_sudo.partner_id.id)
                     refreshToken = create_token(validatorRefreshAuth,expiresIn= refreshTokenExpiresIn, partner_id=user_sudo.partner_id.id)
-                    request.env[ModelsName.matlobUsersTokens].sudo().create(
+                    request.env[ModelsName.authUsersTokens].sudo().create(
                         UsersToken.toMap(token=accessToken,refresh_token=refreshToken ,type=nameAccessToken ,user_id=user_sudo.id)
                     )
                     user_responce = UserAuthResponce(
@@ -91,29 +89,29 @@ class AuthRepository:
 
 
 
-    @staticmethod
-    def logout():
+   
+    def logout(self):
         fetchRequestLanguage()
         token = request.env["ir.http"]._get_bearer_token()
-        user_token = request.env[ModelsName.matlobUsersTokens].sudo().search(
+        user_token = request.env[ModelsName.authUsersTokens].sudo().search(
                     [('token', '=', token)], limit=1)
         user_token.revoked_token()
         pass
 
-    @staticmethod
-    def logoutAllDevice():
+   
+    def logoutAllDevice(self):
         fetchRequestLanguage()
         user_sudo = request.env[ModelsName.usersRES].sudo().search(
                     [('partner_id', '=', request.jwt_partner_id)], limit=1)
-        user_tokens = request.env[ModelsName.matlobUsersTokens].sudo().search(
+        user_tokens = request.env[ModelsName.authUsersTokens].sudo().search(
                     [('user_id', '=', user_sudo.id)])
         print(user_tokens)
         if user_tokens:
            user_tokens.mapped(lambda user_token: user_token.revoked_token())
         pass  
     
-    @staticmethod
-    def sendCode():
+   
+    def sendCode(self):
             fetchRequestLanguage()
             args =  request.get_json_data()
             if 'number' in args:
@@ -129,18 +127,18 @@ class AuthRepository:
                      print("confirmation_code :",user_sudo.confirmation_code)
                      validatorConfirmAuth = getValidatorConfirmAuth()
                      confirmToken = create_token(validatorConfirmAuth,expiresIn= refreshTokenExpiresIn, partner_id=user_sudo.partner_id.id)
-                     request.env[ModelsName.matlobUsersTokens].sudo().create(
+                     request.env[ModelsName.authUsersTokens].sudo().create(
                         UsersToken.toMap(token=confirmToken,refresh_token=None ,type=nameConfirmCodeToken ,user_id=user_sudo.id)
                      )
                      return {"confirm_token": confirmToken}  
               else: raise ParamsErrorException("the number is not found")
             else: raise ParamsErrorException("the key number is not found json")  
     
-    @staticmethod
-    def validatorToken():
+   
+    def validatorToken(self):
         fetchRequestLanguage()
         token = request.env["ir.http"]._get_bearer_token()
-        user_token = request.env[ModelsName.matlobUsersTokens].sudo().search(
+        user_token = request.env[ModelsName.authUsersTokens].sudo().search(
                     [('token', '=', token)], limit=1)
         if not user_token:
              raise UnauthorizedInvalidToken
@@ -148,11 +146,11 @@ class AuthRepository:
              raise UnauthorizedMissingAuthorizationHeader
         else: 'ok'
 
-    @staticmethod
-    def validatorRefreshToken():
+   
+    def validatorRefreshToken(self):
         fetchRequestLanguage()
         token = request.env["ir.http"]._get_bearer_token()
-        user_token = request.env[ModelsName.matlobUsersTokens].sudo().search(
+        user_token = request.env[ModelsName.authUsersTokens].sudo().search(
                     [('refresh_token', '=', token)], limit=1)
         if not user_token:
              raise UnauthorizedInvalidToken
@@ -160,11 +158,11 @@ class AuthRepository:
              raise UnauthorizedMissingAuthorizationHeader
         else: 'ok'
 
-    @staticmethod
-    def validatorConfirmToken():
+   
+    def validatorConfirmToken(self):
         fetchRequestLanguage()
         token = request.env["ir.http"]._get_bearer_token()
-        user_token = request.env[ModelsName.matlobUsersTokens].sudo().search(
+        user_token = request.env[ModelsName.authUsersTokens].sudo().search(
                     [('token', '=', token)], limit=1)
         if not user_token:
              raise UnauthorizedInvalidToken
@@ -172,11 +170,11 @@ class AuthRepository:
              raise UnauthorizedMissingAuthorizationHeader
         else: 'ok'
 
-    @staticmethod
-    def validatorResetToken():
+   
+    def validatorResetToken(self):
         fetchRequestLanguage()
         token = request.env["ir.http"]._get_bearer_token()
-        user_token = request.env[ModelsName.matlobUsersTokens].sudo().search(
+        user_token = request.env[ModelsName.authUsersTokens].sudo().search(
                     [('token', '=', token)], limit=1)
         if not user_token:
              raise UnauthorizedInvalidToken
@@ -184,8 +182,8 @@ class AuthRepository:
              raise UnauthorizedMissingAuthorizationHeader
         else: 'ok'
 
-    @staticmethod
-    def refreshToken():
+   
+    def refreshToken(self):
         fetchRequestLanguage()
         user_sudo = request.env[ModelsName.usersRES].sudo().search(
                     [('partner_id', '=', request.jwt_partner_id)], limit=1)
@@ -193,13 +191,13 @@ class AuthRepository:
         accessToken = create_token(validatorPortalAuth,expiresIn= accessTokenExpiresIn, partner_id=user_sudo.partner_id.id)
         
         token = request.env["ir.http"]._get_bearer_token()
-        user_token = request.env[ModelsName.matlobUsersTokens].sudo().search(
+        user_token = request.env[ModelsName.authUsersTokens].sudo().search(
                     [('refresh_token', '=', token)], limit=1)
         user_token.update_token(token=accessToken)
         return {"access_token": accessToken }
     
-    @staticmethod
-    def confirmResetPassword():
+   
+    def confirmResetPassword(self):
         fetchRequestLanguage()
         args =  request.get_json_data()
         if 'confirmation_code' in args:
@@ -210,7 +208,7 @@ class AuthRepository:
                  if user_sudo.confirmation_code == confirmation_code:      
                      validatorResetAuth = getValidatorResetAuth()
                      confirmResetToken = create_token(validatorResetAuth,expiresIn= confirmResetExpiresIn, partner_id=user_sudo.partner_id.id)
-                     request.env[ModelsName.matlobUsersTokens].sudo().create(
+                     request.env[ModelsName.authUsersTokens].sudo().create(
                         UsersToken.toMap(token=confirmResetToken,refresh_token=None ,type=nameResetToken ,user_id=user_sudo.id)
                       )
                  else:  
@@ -222,8 +220,8 @@ class AuthRepository:
         else: raise ParamsErrorException("the key confirmation code isnot found in json bady")
         
 
-    @staticmethod
-    def confirmCode():
+   
+    def confirmCode(self):
         fetchRequestLanguage()
         args =  request.get_json_data()
         if 'confirmation_code' in args:
@@ -239,7 +237,7 @@ class AuthRepository:
                     })
                     #revoked_token 
                     token = request.env["ir.http"]._get_bearer_token()
-                    user_confirmToken = request.env[ModelsName.matlobUsersTokens].sudo().search(
+                    user_confirmToken = request.env[ModelsName.authUsersTokens].sudo().search(
                     [('token', '=', token)], limit=1)
                     user_confirmToken.revoked_token()
                     # get validator Tokens
@@ -248,7 +246,7 @@ class AuthRepository:
                     # create Tokens and save in UsersTokens
                     accessToken = create_token(validatorPortalAuth,expiresIn= accessTokenExpiresIn, partner_id=user_sudo.partner_id.id)
                     refreshToken = create_token(validatorRefreshAuth,expiresIn= refreshTokenExpiresIn, partner_id=user_sudo.partner_id.id)
-                    request.env[ModelsName.matlobUsersTokens].sudo().create(
+                    request.env[ModelsName.authUsersTokens].sudo().create(
                         UsersToken.toMap(token=accessToken,refresh_token=refreshToken ,type=nameAccessToken ,user_id=user_sudo.id)
                     )
                     user_responce = UserAuthResponce(
@@ -271,8 +269,8 @@ class AuthRepository:
         else: raise ParamsErrorException("the key confirmation code is not found in json bady")
  
 
-    @staticmethod
-    def changePassword():
+   
+    def changePassword(self):
         fetchRequestLanguage()
         args =  request.get_json_data()
         if 'new_password' in args:
@@ -283,7 +281,7 @@ class AuthRepository:
                     user_sudo.change_password(password=new_password)
                     #revoked_token 
                     token = request.env["ir.http"]._get_bearer_token()
-                    user_confirmToken = request.env[ModelsName.matlobUsersTokens].sudo().search(
+                    user_confirmToken = request.env[ModelsName.authUsersTokens].sudo().search(
                     [('token', '=', token)], limit=1)
                     user_confirmToken.revoked_token()
                     return 'ok'                  

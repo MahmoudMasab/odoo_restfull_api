@@ -21,17 +21,17 @@ msgid "Confirmation Code"
 msgstr ""
 
 #. module: best_restfull_api
-#: model:ir.model.fields,field_description:best_restfull_api.field_matlob_users_tokens__create_uid
+#: model:ir.model.fields,field_description:best_restfull_api.field_auth_users_tokens__create_uid
 msgid "Created by"
 msgstr ""
 
 #. module: best_restfull_api
-#: model:ir.model.fields,field_description:best_restfull_api.field_matlob_users_tokens__create_date
+#: model:ir.model.fields,field_description:best_restfull_api.field_auth_users_tokens__create_date
 msgid "Created on"
 msgstr ""
 
 #. module: best_restfull_api
-#: model:ir.model.fields,field_description:best_restfull_api.field_matlob_users_tokens__display_name
+#: model:ir.model.fields,field_description:best_restfull_api.field_auth_users_tokens__display_name
 msgid "Display Name"
 msgstr ""
 
@@ -46,7 +46,7 @@ msgid "HTTP Routing"
 msgstr "مسار HTTP"
 
 #. module: best_restfull_api
-#: model:ir.model.fields,field_description:best_restfull_api.field_matlob_users_tokens__id
+#: model:ir.model.fields,field_description:best_restfull_api.field_auth_users_tokens__id
 msgid "ID"
 msgstr ""
 
@@ -61,17 +61,17 @@ msgid "JWT Validator Configuration"
 msgstr ""
 
 #. module: best_restfull_api
-#: model:ir.model.fields,field_description:best_restfull_api.field_matlob_users_tokens____last_update
+#: model:ir.model.fields,field_description:best_restfull_api.field_auth_users_tokens____last_update
 msgid "Last Modified on"
 msgstr ""
 
 #. module: best_restfull_api
-#: model:ir.model.fields,field_description:best_restfull_api.field_matlob_users_tokens__write_uid
+#: model:ir.model.fields,field_description:best_restfull_api.field_auth_users_tokens__write_uid
 msgid "Last Updated by"
 msgstr ""
 
 #. module: best_restfull_api
-#: model:ir.model.fields,field_description:best_restfull_api.field_matlob_users_tokens__write_date
+#: model:ir.model.fields,field_description:best_restfull_api.field_auth_users_tokens__write_date
 msgid "Last Updated on"
 msgstr ""
 
@@ -81,23 +81,23 @@ msgid "Partner Id Strategy"
 msgstr ""
 
 #. module: best_restfull_api
-#: model:ir.model.fields,field_description:best_restfull_api.field_matlob_users_tokens__refresh_token
+#: model:ir.model.fields,field_description:best_restfull_api.field_auth_users_tokens__refresh_token
 msgid "Refresh Token"
 msgstr ""
 
 #. module: best_restfull_api
-#: model:ir.model.fields,field_description:best_restfull_api.field_matlob_users_tokens__revoked
+#: model:ir.model.fields,field_description:best_restfull_api.field_auth_users_tokens__revoked
 msgid "Revoked"
 msgstr ""
 
 #. module: best_restfull_api
-#: model:ir.model.fields,field_description:best_restfull_api.field_matlob_users_tokens__token
+#: model:ir.model.fields,field_description:best_restfull_api.field_auth_users_tokens__token
 msgid "Token"
 msgstr ""
 
 #. module: best_restfull_api
 #: model:ir.model,name:best_restfull_api.model_res_users
-#: model:ir.model.fields,field_description:best_restfull_api.field_matlob_users_tokens__user_id
+#: model:ir.model.fields,field_description:best_restfull_api.field_auth_users_tokens__user_id
 msgid "User"
 msgstr "المستخدم"
 
@@ -126,8 +126,8 @@ msgid "invalid token"
 msgstr "رمز التحقق من هوية غير صالح"
 
 #. module: best_restfull_api
-#: model:ir.model,name:best_restfull_api.model_matlob_users_tokens
-msgid "matlob.users_tokens"
+#: model:ir.model,name:best_restfull_api.model_auth_users_tokens
+msgid "auth.users_tokens"
 msgstr ""
 
 #. module: best_restfull_api
@@ -186,7 +186,7 @@ msgid "token missing"
 msgstr "رمز التحقق من هوية تم رفضه"
 
 #. module: best_restfull_api
-#: model:ir.model.fields,field_description:best_restfull_api.field_matlob_users_tokens__type
+#: model:ir.model.fields,field_description:best_restfull_api.field_auth_users_tokens__type
 msgid "type"
 msgstr "النوع"
 

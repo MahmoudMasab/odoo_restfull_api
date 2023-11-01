@@ -1,45 +1,45 @@
+from abc import ABC, abstractmethod
 
-
-from odoo import api, models
-from ..repositories.auth_repository import AuthRepository
-
-class AuthService:
-    @staticmethod
-    def signUp():
-        return AuthRepository.signUp()
-    @staticmethod
-    def signIn():
-        return AuthRepository.signIn()
-    @staticmethod
-    def logout():
-        return AuthRepository.logout()
-    @staticmethod
-    def sendCode():
-        return AuthRepository.sendCode()
-    @staticmethod
-    def validatorToken():
-        return AuthRepository.validatorToken()
-    @staticmethod
-    def validatorRefreshToken():
-        return AuthRepository.validatorRefreshToken()
-    @staticmethod
-    def validatorConfirmToken():
-        return AuthRepository.validatorConfirmToken()
-    @staticmethod
-    def validatorResetToken():
-        return AuthRepository.validatorResetToken()
-    @staticmethod
-    def refreshToken():
-        return AuthRepository.refreshToken()
-    @staticmethod
-    def logoutAllDevice():
-        return AuthRepository.logoutAllDevice()
-    @staticmethod
-    def confirmCode():
-        return AuthRepository.confirmCode()
-    @staticmethod
-    def confirmResetPassword():
-        return AuthRepository.confirmResetPassword()
-    @staticmethod
-    def changePassword():
-        return AuthRepository.changePassword()
+class IAuthService(ABC):
+    @abstractmethod
+    def signUp(self):
+        pass
+    @abstractmethod
+    def signIn(self):
+        pass
+    @abstractmethod
+    def logout(self):
+        pass
+    @abstractmethod
+    def sendCode(self):
+        pass
+    @abstractmethod
+    def validatorToken(self):
+        pass
+    @abstractmethod
+    def validatorRefreshToken(self):
+        pass
+    @abstractmethod
+    def validatorConfirmToken(self):
+        pass
+    @abstractmethod
+    def validatorResetToken(self):
+        pass
+    @abstractmethod
+    def refreshToken(self):
+        pass
+    @abstractmethod
+    def logoutAllDevice(self):
+        pass
+    @abstractmethod
+    def confirmCode(self):
+        pass
+    @abstractmethod
+    def confirmResetPassword(self):
+        pass
+    @abstractmethod
+    def changePassword(self):
+        pass
+    
+    
+ 

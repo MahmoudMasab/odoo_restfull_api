@@ -2,7 +2,7 @@ from  ..utils.models_name import ModelsName
 from odoo import fields, models
 
 class UsersToken(models.Model):
-    _name = ModelsName.matlobUsersTokens  
+    _name = ModelsName.authUsersTokens  
     # Replace with your module and model name
 
     # Add fields

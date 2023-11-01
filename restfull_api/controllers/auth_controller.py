@@ -4,20 +4,25 @@ from ..utils.route_end_point import RouteEndPoint
 from ..utils.exceptions_unauthorized import UnauthorizedInvalidToken, UnauthorizedMissingAuthorizationHeader
 from odoo import exceptions,_
 import sys
-from ..service.auth_service import AuthService 
+from ..service.auth_service import IAuthService  
 from odoo import http
 from odoo.http import request
 from ..utils.base_ok_response import BaseOkResponse
 from ..utils.base_bad_response import BaseBadResponse
-from ..utils.custom_exception import  ParamsErrorException
+from ..utils.custom_exception import  ParamsErrorException 
+from ..service.dependency_container import dependency_container 
+
 
 class AuthController(http.Controller):
-
+    authService: IAuthService = None
+    def __init__(self):
+         self.authService = dependency_container.get_dependency(IAuthService)
+    
     @http.route(RouteEndPoint.signUp, method=['POST'], auth='public', csrf=False, cors='*')
     def signUp(self, **kwargs):
       print('signUp')
-      try: 
-           result = AuthService.signUp()
+      try:  
+           result = self.authService.signUp()
            return request.make_response(BaseOkResponse(message=_("success signUp"),data=result).toJSON(), headers=[('Content-Type', 'application/json')], cookies=None, status=200)
       except json.decoder.JSONDecodeError as error:    
             return request.make_response(BaseBadResponse(message=_("invalid json data"),erorr= sys.exc_info()).toJSON(), headers=[('Content-Type', 'application/json')], cookies=None, status=400)
@@ -36,7 +41,7 @@ class AuthController(http.Controller):
     def signIn(self, **kwargs):
       print('signIn')
       try: 
-           result = AuthService.signIn()
+           result = self.authService.signIn()
            return request.make_response(BaseOkResponse(message=_("success login"),data=result).toJSON(), headers=[('Content-Type', 'application/json')], cookies=None, status=200)
       except json.decoder.JSONDecodeError as error:    
             return request.make_response(BaseBadResponse(message=_("invalid json data"),erorr= sys.exc_info()).toJSON(), headers=[('Content-Type', 'application/json')], cookies=None, status=400)
@@ -55,8 +60,8 @@ class AuthController(http.Controller):
     def logout(self, **kwargs):
       print('logout')
       try: 
-           AuthService.validatorToken()
-           AuthService.logout()
+           self.authService.validatorToken()
+           self.authService.logout()
            return request.make_response(BaseOkResponse(message=_("success_logout"),data=None).toJSON(), headers=[('Content-Type', 'application/json')], cookies=None, status=200)  
       except UnauthorizedInvalidToken:    
             return request.make_response(BaseBadResponse(message=_("invalid token"),erorr= sys.exc_info(),statusCode=401).toJSON(), headers=[('Content-Type', 'application/json')], cookies=None, status=401)
@@ -71,8 +76,8 @@ class AuthController(http.Controller):
     def logoutAllDevice(self, **kwargs):
       print('logoutAllDevice')
       try: 
-           AuthService.validatorToken()
-           AuthService.logoutAllDevice()
+           self.authService.validatorToken()
+           self.authService.logoutAllDevice()
            return request.make_response(BaseOkResponse(message=_("success_logout_all_device"),data=None).toJSON(), headers=[('Content-Type', 'application/json')], cookies=None, status=200)  
       except UnauthorizedInvalidToken:    
             return request.make_response(BaseBadResponse(message=_("invalid token"),erorr= sys.exc_info(),statusCode=401).toJSON(), headers=[('Content-Type', 'application/json')], cookies=None, status=401)
@@ -86,8 +91,8 @@ class AuthController(http.Controller):
     def refreshToken(self, **kwargs):
       print('logout')
       try: 
-           AuthService.validatorRefreshToken()
-           result = AuthService.refreshToken()
+           self.authService.validatorRefreshToken()
+           result = self.authService.refreshToken()
            return request.make_response(BaseOkResponse(message="ok",data=result).toJSON(), headers=[('Content-Type', 'application/json')], cookies=None, status=200)  
       except UnauthorizedInvalidToken:    
             return request.make_response(BaseBadResponse(message=_("invalid token"),erorr= sys.exc_info(),statusCode=401).toJSON(), headers=[('Content-Type', 'application/json')], cookies=None, status=401)
@@ -102,7 +107,7 @@ class AuthController(http.Controller):
     def sendCode(self, **kwargs):
       print('sendCode')
       try:
-        result = AuthService.sendCode() 
+        result = self.authService.sendCode() 
         return request.make_response(BaseOkResponse(message=_("the_code_has_send"),data=result).toJSON(), headers=[('Content-Type', 'application/json')], cookies=None, status=200)
       except json.decoder.JSONDecodeError as error:    
             return request.make_response(BaseBadResponse(message=_("invalid json data"),erorr= error).toJSON(), headers=[('Content-Type', 'application/json')], cookies=None, status=400)
@@ -121,8 +126,8 @@ class AuthController(http.Controller):
     def confirmCode(self, **kwargs):
       print('confirmCode')
       try:
-        AuthService.validatorConfirmToken()
-        result = AuthService.confirmCode() 
+        self.authService.validatorConfirmToken()
+        result = self.authService.confirmCode() 
         return request.make_response(BaseOkResponse(message="ok",data=result).toJSON(), headers=[('Content-Type', 'application/json')], cookies=None, status=200)
       except json.decoder.JSONDecodeError as error:    
             return request.make_response(BaseBadResponse(message=_("invalid json data"),erorr= error).toJSON(), headers=[('Content-Type', 'application/json')], cookies=None, status=400)
@@ -145,8 +150,8 @@ class AuthController(http.Controller):
     def confirmResetPassword(self, **kwargs):
       print('confirmCode')
       try:
-        AuthService.validatorConfirmToken()
-        result = AuthService.confirmResetPassword() 
+        self.authService.validatorConfirmToken()
+        result = self.authService.confirmResetPassword() 
         return request.make_response(BaseOkResponse(message="ok",data=result).toJSON(), headers=[('Content-Type', 'application/json')], cookies=None, status=200)
       except json.decoder.JSONDecodeError as error:    
             return request.make_response(BaseBadResponse(message=_("invalid json data"),erorr= error).toJSON(), headers=[('Content-Type', 'application/json')], cookies=None, status=400)
@@ -169,8 +174,8 @@ class AuthController(http.Controller):
     def changePassword(self, **kwargs):
       print('changePassword')
       try:
-        AuthService.validatorResetToken()
-        result = AuthService.changePassword() 
+        self.authService.validatorResetToken()
+        result = self.authService.changePassword() 
         return request.make_response(BaseOkResponse(message="ok",data=result).toJSON(), headers=[('Content-Type', 'application/json')], cookies=None, status=200)
       except json.decoder.JSONDecodeError as error:    
             return request.make_response(BaseBadResponse(message=_("invalid json data"),erorr= sys.exc_info()).toJSON(), headers=[('Content-Type', 'application/json')], cookies=None, status=400)
