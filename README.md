@@ -23,12 +23,14 @@ Go to odoo.conf file and add path module  in addons_path
 ## Boilerplate Features:
 
 * Auth ( signUp,signIn,logout,logoutAllDevice,refreshToken,sendCode,registerConfirmCode,confirmResetPassword,changePassword )
+* dependency_injection (DependencyContainer,singleton,IAuthService,AuthRepository)
 * http ( Controller )
 * Auth jwt
 * Route
-* Request (env , HttpPa , make_response)
+* Request (env , httprequest , make_response)
 * Responce
 * stautsCode
+* fetchRequestLanguage
 * exceptions and custom_exceptions
 * custom override _handle_error  of ir.http
 * custom override _get_partner_id  of auth.jwt.validator
