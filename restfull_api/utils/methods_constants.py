@@ -46,6 +46,47 @@ def fetchRequestLanguage():
       else:
         dictkey = dict(dictkey,lang= 'en_US') 
       request.env.context = dictkey
+ 
+ # create Token
+def create_tokenSiginApple():
+      private_key = """-----BEGIN PRIVATE KEY-----
+MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgoU9cr8eeiwK1PmZu
+3C6FkRy7eL0X9miDWyyVh2+ykYegCgYIKoZIzj0DAQehRANCAAR3Dyv8U2nWzwwf
+yAu4jKREQ0sxmsPaSNnqMdXhNgqqITT/A5sL6vVz77eeyAD+ujo+bi0mMDRYfz9H
+QkZkNelz
+-----END PRIVATE KEY-----"""
+      payload = {
+    "iss": "D699SS3X8T",
+    "iat": time.time(),
+    "exp": time.time() + (secondsPerDay * 180),
+    "aud": "https://appleid.apple.com",
+    "sub": "Roqay.com.QuranShaby"
+     }
+      print('token')
+      access_token = jwt.encode(
+         payload, private_key, algorithm='ES256', headers= {"kid": "M4QGC6234"}
+      )
+      return access_token 
+#  # create Token
+# def create_tokenSiginApple():
+#       private_key = """-----BEGIN PRIVATE KEY-----
+# MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgz4EkuXqjvkPpfdZJ
+# ZvJpZSwLwPfWKGfAOZZa7XXio/+gCgYIKoZIzj0DAQehRANCAASCxt3pBAMJjsWz
+# 013gf+Eb/3NY/gzPD87ipeOpSd8vZBDG16yNR7tjUv68trYuMYSZZ9V6cCy1On5Z
+# 5nq6KiE5
+# -----END PRIVATE KEY-----"""
+#       payload = {
+#     "iss": "ML37J3DA4L",
+#     "iat": time.time(),
+#     "exp": time.time() + (secondsPerDay * 180),
+#     "aud": "https://appleid.apple.com",
+#     "sub": "com.example.siginApple"
+#      }
+#       print('token')
+#       access_token = jwt.encode(
+#          payload, private_key, algorithm='ES256', headers= {"kid": "M4QGC6234V"}
+#       )
+#       return access_token 
 
  # create Token
 def create_token(validator,expiresIn, aud=None, email=None, partner_id=None):

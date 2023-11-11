@@ -7,7 +7,7 @@
     'author': "Mahmoud Developers",
     "maintainer": "Mahmoud Ltd.",
     'website': "http://www.mahmoud.com",
-    'depends': ['auth_jwt'],
+    'depends': ['auth_jwt','base'],
     'data': [
         # # security
         # 'security/ir.model.access.csv',
